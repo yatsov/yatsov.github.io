@@ -1,0 +1,69 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 坐标系统及地图投影 · yatsov的博客</title><meta name="description" content="坐标系统及地图投影 - yatsov"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yatsov.github.io/atom.xml" title="yatsov的博客"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">目录</a></li><li class="nav-list-item"><a href="/links/index.html" target="_self" class="nav-list-link">分类</a></li><li class="nav-list-item"><a href="https://github.com/yatsov/yatsov.github.io" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/about/index.html" target="_self" class="nav-list-link">关于</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">坐标系统及地图投影</h1><div class="post-info">2018年4月21日</div><div class="post-content"><p>坐标系统及地图投影<br><a id="more"></a></p>
+<h2 id="坐标系"><a href="#坐标系" class="headerlink" title="坐标系"></a>坐标系</h2><p>WGS84<br>CGS2000</p>
+<h2 id="投影"><a href="#投影" class="headerlink" title="投影"></a>投影</h2><h3 id="1-高斯克吕格投影"><a href="#1-高斯克吕格投影" class="headerlink" title="1 高斯克吕格投影"></a>1 高斯克吕格投影</h3><p>高斯克吕格投影是一个<strong>横切等角椭圆柱投影</strong>。<br>特点：<br>1）中央经线上没有长度变形；<br>2）在同一条纬线上，离中央经线越远变形越大；<br>3）在同一条经线上，纬度越低变形越大。<br>为了保证精度采用分带投影的方法。<br>规定：1：2.5万-1：50万采用6度分带。<br>大于1：1万采用3°分带法。<br>三度带是从一度三十分开始这样让他们的中线在一样的位置。</p>
+<blockquote>
+<p>注：高斯投影直角坐标系与笛卡尔直角坐标系有不同。</p>
+</blockquote>
+<h3 id="兰伯特投影"><a href="#兰伯特投影" class="headerlink" title="兰伯特投影"></a>兰伯特投影</h3><p>兰伯特投影为<strong>正轴等角割圆锥投影</strong>。<br>在标准纬线之上越向上变形越大。</p>
+<h3 id="墨卡托投影、web墨卡托投影"><a href="#墨卡托投影、web墨卡托投影" class="headerlink" title="墨卡托投影、web墨卡托投影"></a>墨卡托投影、web墨卡托投影</h3><p><strong>正轴等角圆柱投影</strong>，墨卡托投影大圆航线。<br>特点：等角</p>
+<h3 id="UTM投影"><a href="#UTM投影" class="headerlink" title="UTM投影"></a>UTM投影</h3><p>割的不一样从两极的园开始割。</p>
+<h2 id="地图服务"><a href="#地图服务" class="headerlink" title="地图服务"></a>地图服务</h2><h4 id="WMS种类与操作"><a href="#WMS种类与操作" class="headerlink" title="WMS种类与操作"></a>WMS种类与操作</h4><p>比起WFS，WMS的操作要简单的多：</p>
+<ol>
+<li>GetCapabilities（获取服务中的要素类及支持的操作）</li>
+<li>GetMap（获取地图）</li>
+<li>GetFeatureInfo（根据地图上的像素点获取更详细的要素信息，类似Identify功能）<br>同样，这些操作并不是必须全部实现，而是实现全部或部分。根据所支持的操作不同，WMS可以分为2类：</li>
+<li>Basic WMS（就是最常被提及的WMS，必须支持GetCapabilities/ GetMap操作）</li>
+<li>Queryable WFS（必须在Basic WMS基础上加上GetFeatureInfo操作）<br>关于服务涉及的基本元素，可以参考前面的章节：《服务涉及的基本元素》。WMS中只规定了KVP格式的请求，因此下面介绍一下WMS的请求和响应内容。</li>
+</ol>
+<h4 id="WMTS瓦片"><a href="#WMTS瓦片" class="headerlink" title="WMTS瓦片"></a>WMTS瓦片</h4><p>WMTS只是瓦片，获得的时候要写上瓦片的行列号<br>在一个WMTS服务中包括以下3个操作：</p>
+<ol>
+<li><p>GetCapabilities（获取服务的元信息）</p>
+</li>
+<li><p>GetTile（获取切片）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">http://www.maps.bob/maps.cgi?</span><br><span class="line">service=WMTS&amp;</span><br><span class="line">request=GetTile&amp;</span><br><span class="line">version=1.0.0&amp;</span><br><span class="line">layer=etopo2&amp;</span><br><span class="line">style=default&amp;</span><br><span class="line">format=image/png&amp;</span><br><span class="line">TileMatrixSet=WholeWorld_CRS_84&amp;</span><br><span class="line">TileMatrix=10m&amp;</span><br><span class="line">TileRow=1&amp;</span><br><span class="line">TileCol=3</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>GetFeatureInfo（可选，获取点选的要素信息）</p>
+</li>
+</ol>
+<h4 id="WCS-网络地理场数据服务"><a href="#WCS-网络地理场数据服务" class="headerlink" title="WCS 网络地理场数据服务"></a>WCS 网络地理场数据服务</h4><p>WCS包括以下3个操作：</p>
+<ol>
+<li><p>GetCapabilities（获取服务的元信息）</p>
+</li>
+<li><p>DescribeCoverage（获取Coverage的描述信息）</p>
+</li>
+<li><p>GetCoverage（获取Coverage）</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">http://server_address/path/script?</span><br><span class="line"></span><br><span class="line">service=WCS &amp;</span><br><span class="line"></span><br><span class="line">request=DescribeCoverage&amp;</span><br><span class="line"></span><br><span class="line">version=1.1.2 &amp;</span><br><span class="line"></span><br><span class="line">identifiers=Cov1,Cov2,Cov3</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="WFS-服务"><a href="#WFS-服务" class="headerlink" title="WFS 服务"></a>WFS 服务</h4><p>要素服务<br>当一个客户端想要访问WFS服务时，一般会涉及到以下的流程：</p>
+<ol>
+<li><p>通过操作获取WFS服务支持的操作和要素类（Feature Type，可以理解为WFS中的数据集）。</p>
+</li>
+<li><p>（可能）通过操作获取WFS服务支持的要素类的定义。</p>
+</li>
+<li><p>客户端发送某个操作的请求。</p>
+</li>
+<li><p>WFS服务处理请求。</p>
+</li>
+<li><p>WFS服务返回处理的结果和状态。</p>
+</li>
+</ol>
+<p>上面几个步骤中所提到的“操作”包括：</p>
+<ol>
+<li><p>GetCapabilities（获取服务中的要素类及支持的操作）</p>
+</li>
+<li><p>DescribeFeatureType（描述要素类的信息）</p>
+</li>
+<li><p>GetFeature（获取要素）</p>
+</li>
+<li><p>GetGmlObject（通过XLink获取GML对象）</p>
+</li>
+<li><p>Transaction（创建、更新、删除数据的事务操作）</p>
+</li>
+<li><p>LockFeature（在事务过程中锁定要素）</p>
+</li>
+</ol>
+<h4 id="地名地址要素服务（WFS-G-："><a href="#地名地址要素服务（WFS-G-：" class="headerlink" title="地名地址要素服务（WFS-G)："></a>地名地址要素服务（WFS-G)：</h4><p><a href="http://www.opengeospatial.org/standards/wfs" target="_blank" rel="noopener">http://www.opengeospatial.org/standards/wfs</a></p>
+<h4 id="地理处理Web服务（WPS）："><a href="#地理处理Web服务（WPS）：" class="headerlink" title="地理处理Web服务（WPS）："></a>地理处理Web服务（WPS）：</h4><p><a href="http://www.opengeospatial.org/standards/wps" target="_blank" rel="noopener">http://www.opengeospatial.org/standards/wps</a></p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://www.cnblogs.com/rainbow70626/p/4379615.html" target="_blank" rel="noopener">https://www.cnblogs.com/rainbow70626/p/4379615.html</a></p>
+</div></article></div></main><footer><div class="paginator"><a href="/CSS/CSS实现尖角样式.html" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="http://yatsov.github.io">yatsov</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Tomcat的安装以及简要调优 · yatsov的博客</title><meta name="description" content="Tomcat的安装以及简要调优 - yatsov"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yatsov.github.io/atom.xml" title="yatsov的博客"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">目录</a></li><li class="nav-list-item"><a href="/links/index.html" target="_self" class="nav-list-link">分类</a></li><li class="nav-list-item"><a href="https://github.com/yatsov/yatsov.github.io" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/about/index.html" target="_self" class="nav-list-link">关于</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Tomcat的安装以及简要调优</h1><div class="post-info">2018年4月21日</div><div class="post-content"><p>Tomcat的安装以及简要调优<br><a id="more"></a></p>
+<h1 id="1-Tomcat的安装"><a href="#1-Tomcat的安装" class="headerlink" title="1 Tomcat的安装"></a>1 Tomcat的安装</h1><p>文档主要介绍一个和多个Tomcat的安装、应用程序的部署以及常见问题解答。此处以Tomcat8为例但是现场请安装8.5。</p>
+<h2 id="1-1-Tomcat的安装"><a href="#1-1-Tomcat的安装" class="headerlink" title="1.1 Tomcat的安装"></a><strong>1.1 Tomcat的安装</strong></h2><p>Tomcat使用免安装版，无需安装解压即可将压缩包解压到指定的路径。</p>
+<h3 id="1-1-1-查看端口使用情况"><a href="#1-1-1-查看端口使用情况" class="headerlink" title="1.1.1 查看端口使用情况"></a>1.1.1 查看端口使用情况</h3><p>在命令窗口中使用“netstat -ano”查看端口使用情况，</p>
+<p><img src="media/2449157b9f161a28356ebda0f7a8cc7d.png" alt=""></p>
+<p>图4.1</p>
+<h3 id="1-1-2-修改端口号"><a href="#1-1-2-修改端口号" class="headerlink" title="1.1.2 修改端口号"></a>1.1.2 修改端口号</h3><p>打开Tomcat-8\conf\server.xml文件，修改端口号,将Connector<br>port设置为使用的端口，防止端口被占用，</p>
+<p><img src="media/4fee0738f3c228e0248eb29587387b9c.png" alt=""></p>
+<p>图4.2</p>
+<h3 id="1-1-3-设置管理员密码"><a href="#1-1-3-设置管理员密码" class="headerlink" title="1.1.3 设置管理员密码"></a>1.1.3 设置管理员密码</h3><p>设置管理员用户和密码会增加远程攻击可能性，所以本处只做学习说明，根据之后的需要调用。项目安装中不设置。</p>
+<p>设置Tomcat管理员用户名和密码，打开Tomcat-8\conf\server.xml文件Tomcat-users.xml，增加下面代码，建议设置为<br>“admin”，</p>
+<p>\&lt;role rolename=”manager-gui”/></p>
+<p>\&lt;user username=”admin” password=”admin” roles=”manager-gui”/></p>
+<p><img src="media/64ee5b20cfe2c4b761cdabb11173304e.png" alt=""></p>
+<p>图4.3</p>
+<h3 id="1-1-4-调整Tomcat内存大小"><a href="#1-1-4-调整Tomcat内存大小" class="headerlink" title="1.1.4 调整Tomcat内存大小"></a>1.1.4 调整Tomcat内存大小</h3><p>以编辑方式打开D:\apache-Tomcat-8\bin目录下的catalina.bat文件，在文件\@echo<br>off下，增加“set JAVA_OPTS=-server -Xms512m -Xmx1024m -XX:PermSize=512M<br>-XX:MaxPermSize=1024M”PermSize可以根据实际情况进行调整，可在一定程度上解除在中间件运行过程中发生内存溢出的异常。</p>
+<p><img src="media/042485b028faae6ea95d027da1a3ac93.png" alt=""></p>
+<p>图4.4</p>
+<h3 id="1-1-5-启动Tomcat服务"><a href="#1-1-5-启动Tomcat服务" class="headerlink" title="1.1.5 启动Tomcat服务"></a>1.1.5 启动Tomcat服务</h3><p>找到文件夹打开Tomcat-8\bin\ startup.bat，双击启动，即可看到部署成功。</p>
+<p><img src="media/7c0ae4cb550692c87cbcdc2460f426a2.png" alt=""></p>
+<p>图4.5</p>
+<p>也可以打开IE浏览器，在地址栏中输入：<a href="http://localhost:80/" target="_blank" rel="noopener">http://localhost:80/</a> <em>；其中<br>80为端口号，要看自己的实际设置。</em>出现如下图所示网页，即表明Tomcat安装成功。</p>
+<p><img src="media/8162c1db6560f05cf26f83b11d475de7.png" alt=""></p>
+<p>图4.6</p>
+<h3 id="1-1-6-查看部署项目"><a href="#1-1-6-查看部署项目" class="headerlink" title="1.1.6 查看部署项目"></a>1.1.6 查看部署项目</h3><p>点击图中的的Manager App可查看部署的项目。</p>
+<p><img src="media/c7cda158429f634f8ac477e2aae63a07.png" alt=""></p>
+<p>图4.7</p>
+<p>点击“Manager<br>App”，弹出用户名和密码界面，即在Tomcat-users.xml文件中设置的用户名和密码。</p>
+<p><img src="media/5fce84dd33e72521b4e5dfc288eecbeb.png" alt=""></p>
+<p>图4.8</p>
+<p>输入用户名和密码，可查看部署的项目。</p>
+<p><img src="media/7086694bb8d33a159638f33e4998b4c3.png" alt=""></p>
+<p>图4.9</p>
+<h3 id="1-1-7-开启GZIP压缩"><a href="#1-1-7-开启GZIP压缩" class="headerlink" title="1.1.7 开启GZIP压缩"></a>1.1.7 开启GZIP压缩</h3><p>在TOMCAT_HOME/conf/server.xml<br>中的找到如下Connector将compression改成on并修改其它属性致图片状。</p>
+<p><img src="media/f9a39b5923862c72fe5d1927410aa9d9.png" alt=""></p>
+<p>图4.10</p>
+<h2 id="1-2-多个Tomcat的安装和配置"><a href="#1-2-多个Tomcat的安装和配置" class="headerlink" title="1.2 多个Tomcat的安装和配置"></a><strong>1.2 多个Tomcat的安装和配置</strong></h2><p>Tomcat可以作为一款绿色软件使用，单独安装或直接拷贝都可以完成Tomcat的部署，使用免安装版。</p>
+<h3 id="1-2-1-拷贝"><a href="#1-2-1-拷贝" class="headerlink" title="1.2.1 拷贝"></a><strong>1.2.1 拷贝</strong></h3><p>免安装版的Tomcat可在同一个电脑上部署多个，将Tomcat-8文件下的所有子文件，复制到Tomcat-8082文件夹下，注意第一个Tomcat的配置不变，修改新增的Tomcat下一些参数。</p>
+<h3 id="1-2-2-修改端口号"><a href="#1-2-2-修改端口号" class="headerlink" title="1.2.2 修改端口号"></a><strong>1.2.2 修改端口号</strong></h3><p>打开D:\ Tomcat-8082\conf目录下的server.xml文件，需要修改三个端口号：</p>
+<ol>
+<li>将之前的“80”端口修改为其他端口号，如“8082”：</li>
+</ol>
+<p><img src="media/b4314acae2c39bef62a04e31f613967e.png" alt=""></p>
+<p>图4.11</p>
+<ol>
+<li>将之前的“8005”端口修改为其他端口号，如“8006”：</li>
+</ol>
+<p><img src="media/cb7f3c2c633529731dca6280b98124a9.png" alt=""></p>
+<p>图4.12</p>
+<ol>
+<li>将之前的“8009”端口修改为其他端口号，如“8092”，8443这个端口不可更改。</li>
+</ol>
+<p><img src="media/a51869af04682dc2ff41e6734c1ad16c.png" alt=""></p>
+<p>图4.13</p>
+<h2 id="1-3-部署和移除应用程序"><a href="#1-3-部署和移除应用程序" class="headerlink" title="1.3 部署和移除应用程序"></a>1.3 部署和移除应用程序</h2><p>在Tomcat中部署和移除项目，共三种方法分别为：手动创建xml文件方式、控制台方式，直接拷贝应用程序到webapps下方式。</p>
+<h3 id="1-3-1-手动创建xml文件方式（推荐）"><a href="#1-3-1-手动创建xml文件方式（推荐）" class="headerlink" title="1.3.1 手动创建xml文件方式（推荐）"></a><strong>1.3.1 手动创建xml文件方式（推荐）</strong></h3><p>对于免安装的Tomcat，并没有控制台功能，这种情况下，推荐采用手动创建xml文件方式来部署应用服务。</p>
+<h4 id="1-3-1-1-部署"><a href="#1-3-1-1-部署" class="headerlink" title="1.3.1.1 部署"></a>1.3.1.1 部署</h4><p>在“D:\<br>Tomcat-8\conf\Catalina\localhost”下新建“文本文档”，重命名为SCMIS.xml，编辑SCMIS.xml，填充内容如下：</p>
+<p>\&lt;?xml version=”1.0” encoding=”UTF-8”?></p>
+<p>\&lt;Context</p>
+<p>crossContext=”true” docBase=”E:\webapp\SCMIS” path=”/SCMIS”<br>reloadable=”true”></p>
+<p>\&lt;/Context></p>
+<p>图4.14</p>
+<p>其中，docBase的值为web应用程序所在文件路径（文中红色字体），path的值为web应用程序的名称（文中红色字体）。</p>
+<h4 id="1-3-1-2-移除"><a href="#1-3-1-2-移除" class="headerlink" title="1.3.1.2 移除"></a>1.3.1.2 移除</h4><p>如果不想启动SCMIS应用服务，只要将“D:\<br>Tomcat-8\conf\Catalina\localhost”下对应的SCMIS.xml文件删除即可。</p>
+<h3 id="1-3-2-直接拷贝应用程序到webapps下方式"><a href="#1-3-2-直接拷贝应用程序到webapps下方式" class="headerlink" title="1.3.2 直接拷贝应用程序到webapps下方式"></a><strong>1.3.2 直接拷贝应用程序到webapps下方式</strong></h3><h4 id="1-3-2-1部署"><a href="#1-3-2-1部署" class="headerlink" title="1.3.2.1部署"></a>1.3.2.1部署</h4><p>直接将web应用程序拷贝到“D:\Tomcat-8\webapps\”下即可。</p>
+<h4 id="1-3-2-2-移除"><a href="#1-3-2-2-移除" class="headerlink" title="1.3.2.2 移除"></a>1.3.2.2 移除</h4><p>如果想不启动SCMIS应用服务，将web应用程序从“D:\ Tomcat-8\webapps\”下删除即可。</p>
+<h2 id="1-4-FAQ"><a href="#1-4-FAQ" class="headerlink" title="1.4 FAQ"></a>1.4 FAQ</h2><h3 id="1-4-1为Tomcat增加Title"><a href="#1-4-1为Tomcat增加Title" class="headerlink" title="1.4.1为Tomcat增加Title"></a><strong>1.4.1为Tomcat增加Title</strong></h3><p>由于现场在实际使用中，可能会在同一台服务器上同时启动多个Tomcat，很容易搞混淆,因此为Tomcat增加Title便于识别当前启动的是什么系统。</p>
+<p>在Tomcat安装目录D:\<br>Tomcat-8\bin中，找到catalina.bat文件并打开，打开搜索框，搜索‘TITLE’找到如下位置，参照下面图片进行修改，注意：第二个红框要加引号</p>
+<p><img src="media/ee7b26087d125b461e5b4168687ca745.png" alt=""></p>
+<p>图4.15</p>
+<p>修改后的效果，如下图所示;</p>
+<p><img src="media/a6eb4c038bb86783fbc2c484efaeba8a.png" alt=""></p>
+<p>图4.16</p>
+<h3 id="1-4-2-Tomcat启动时一闪而过"><a href="#1-4-2-Tomcat启动时一闪而过" class="headerlink" title="1.4.2 Tomcat启动时一闪而过"></a><strong>1.4.2 Tomcat启动时一闪而过</strong></h3><p>解决方法有三种：</p>
+<ol>
+<li><p>环境变量设置不对，先检查环境变量是否设置完全正确了；</p>
+</li>
+<li><p>环境变量检查完全正确的情况下，在startup.bat文件的最后面,换行加上pause；然后再启动看下报错信息</p>
+</li>
+</ol>
+<p><img src="media/6d66f9986175e044e5c05e81dc459a93.png" alt=""></p>
+<p>图4.17</p>
+<ol>
+<li>如果以上方法设置后，还是一闪而过，则找到startup.bat倒数几行的位置；</li>
+</ol>
+<p><img src="media/6ba9ede25ba835612c37507ecf08a226.png" alt=""></p>
+<p>图4.18</p>
+<p>将start修改为run,如下，再启动Tomcat，注意：使用第三种方法知道了错误原因后，则务必将run修改回start。</p>
+<p><img src="media/af6655bd1a411cd775fe41f28e4103fb.png" alt=""></p>
+<p>图4.19</p>
+<h3 id="1-4-3-启动Tomcat失败"><a href="#1-4-3-启动Tomcat失败" class="headerlink" title="1.4.3 启动Tomcat失败"></a><strong>1.4.3 启动Tomcat失败</strong></h3><p>启动Tomcat失败，错误信息如下：“java.lang.OutOfMemoryErrorthrownfromtheUncaughtExceptionHandler<br>in thread “startQuertz_QuartzSchedulerThread”</p>
+<p>失败原因是内存溢出，解决办法参考4.1.4 调整Tomcat内存大小。</p>
+<h3 id="1-4-4-SCMIS项目Running值是false"><a href="#1-4-4-SCMIS项目Running值是false" class="headerlink" title="1.4.4 SCMIS项目Running值是false"></a><strong>1.4.4 SCMIS项目Running值是false</strong></h3><p>Tomcat中Manager app中SCMIS<br>Running值是false，在onf\Catalina\localhost下新建SCMIS.xml时，Tomcat服务应该关闭。</p>
+</div></article></div></main><footer><div class="paginator"><a href="/arcobject/ArcGIS Server 的跨域 .html" class="prev">PREV</a><a href="/arcobject/ArcGIS地图发布与数据切片文档.html" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="http://yatsov.github.io">yatsov</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

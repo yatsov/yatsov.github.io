@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+
+    
+
+    
+
+    <title>yatsov的博客</title>
+    <meta name="author" content="yatsov" />
+    <meta name="version" content="1.0.0" />
+    <meta name="keywords" content="GIS" />
+    <meta name="description" content="git 基础命令使用笔记简介此处为对git使用的一个笔记记录，包括基本使用方法，命令，服务器组建。当年林纳斯大神为了控制Linux的源代码信手撸来，诞生了这个出色的版本管理工具。
+
+注：git只能对普通文件进行管理，二进制文件无法做到修改的版本管理只能追踪更新。
+
+安装windows版本的git安装非常简单下载安装包按照下一步一步步来即可。安装完毕之后需要设置你的用户名和你使用的邮箱
+git config --global user.name &amp;quot;Your Name&amp;quot;
+git " />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+    <meta name="baidu-site-verification" content="F0CXvmUgA9" />
+
+    
+    
+    <link rel="icon" href="/favicon.png">
+    
+
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <div class="app">
+        <header class="header clearfix">
+    <div id="nav" class="nav">
+    <button id="open-panel" class="open-panel"><i class="icon-library"></i></button>
+
+    <nav class="nav-inner">
+
+        
+        
+        <li class="nav-item">
+            <a class="nav-link" href="/">首页</a>
+        </li>
+        
+        
+        
+        <li class="nav-item">
+            <a class="nav-link" href="/front-end">前端</a>
+        </li>
+        
+        
+        
+        <li class="nav-item">
+            <a class="nav-link" href="/back-end">后端</a>
+        </li>
+        
+        
+        
+        <li class="nav-item nav-item-tag">
+            <a id="nav-tag" class="nav-link" href="#">标签</a>
+            <div id="nav-tags" class="nav-tag-wrap">
+                <i class="nav-tag-arrow"></i>
+                
+
+            </div>
+        </li>
+        
+        
+        
+        <li class="nav-item">
+            <a class="nav-link" href="/archives">归档</a>
+        </li>
+        
+        
+        
+        <li class="nav-item">
+            <a class="nav-link" href="/about">关于</a>
+        </li>
+        
+        
+        
+
+    </nav>
+</div>
+
+    <aside id="aside" class="aside">
+    <div id="aside-mask" class="aside-mask"></div>
+    <div id="aside-inner" class="aside-inner">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit"><i class="icon-search-stroke"></i></button><input type="hidden" name="sitesearch" value="http://yatsov.github.io"></form>
+
+        
+        
+        
+        
+
+        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#git-基础命令使用笔记"><span class="toc-number">1.</span> <span class="toc-text">git 基础命令使用笔记</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#简介"><span class="toc-number">1.1.</span> <span class="toc-text">简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">1.2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#命令"><span class="toc-number">1.3.</span> <span class="toc-text">命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#初始化一个空的仓库（Git-repository）"><span class="toc-number">1.3.0.1.</span> <span class="toc-text">初始化一个空的仓库（Git repository）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#添加一次修改"><span class="toc-number">1.3.0.2.</span> <span class="toc-text">添加一次修改</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#掌握工作区的状态"><span class="toc-number">1.3.0.3.</span> <span class="toc-text">掌握工作区的状态</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看修改内容"><span class="toc-number">1.3.0.4.</span> <span class="toc-text">查看修改内容</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回退"><span class="toc-number">1.3.1.</span> <span class="toc-text">回退</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#回退到上一个版本"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">回退到上一个版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看提交历史"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">查看提交历史</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看命令历史"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">查看命令历史</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#撤销暂存区修改"><span class="toc-number">1.3.1.4.</span> <span class="toc-text">撤销暂存区修改</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除文件"><span class="toc-number">1.3.1.5.</span> <span class="toc-text">删除文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#远程仓库"><span class="toc-number">1.3.2.</span> <span class="toc-text">远程仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#添加远程仓库"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">添加远程仓库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#推送到远程分支"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">推送到远程分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#克隆远程仓库"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">克隆远程仓库</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">1.3.3.</span> <span class="toc-text">分支管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建分支并切换到分支"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">创建分支并切换到分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看当前分支"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">查看当前分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#切换分支"><span class="toc-number">1.3.3.3.</span> <span class="toc-text">切换分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#合并分支"><span class="toc-number">1.3.3.4.</span> <span class="toc-text">合并分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除分支"><span class="toc-number">1.3.3.5.</span> <span class="toc-text">删除分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看分支合并图"><span class="toc-number">1.3.3.6.</span> <span class="toc-text">查看分支合并图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#禁用fast-forward模式合并分支"><span class="toc-number">1.3.3.7.</span> <span class="toc-text">禁用fast forward模式合并分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#存储工作现场"><span class="toc-number">1.3.3.8.</span> <span class="toc-text">存储工作现场</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#强行丢弃分支"><span class="toc-number">1.3.3.9.</span> <span class="toc-text">强行丢弃分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看远程库信息"><span class="toc-number">1.3.3.10.</span> <span class="toc-text">查看远程库信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#推送分支"><span class="toc-number">1.3.3.11.</span> <span class="toc-text">推送分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#在本地创建与远程对应分支"><span class="toc-number">1.3.3.12.</span> <span class="toc-text">在本地创建与远程对应分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#建立本地分支和远程分支的关联"><span class="toc-number">1.3.3.13.</span> <span class="toc-text">建立本地分支和远程分支的关联</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标签"><span class="toc-number">1.3.4.</span> <span class="toc-text">标签</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建新标签"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">创建新标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#指定标签信息"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">指定标签信息</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#可以用PGP签名标签"><span class="toc-number">1.3.4.3.</span> <span class="toc-text">可以用PGP签名标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看所有标签"><span class="toc-number">1.3.4.4.</span> <span class="toc-text">查看所有标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#推送一个本地标签"><span class="toc-number">1.3.4.5.</span> <span class="toc-text">推送一个本地标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#推送全部未推送过的本地标签"><span class="toc-number">1.3.4.6.</span> <span class="toc-text">推送全部未推送过的本地标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除一个本地标签"><span class="toc-number">1.3.4.7.</span> <span class="toc-text">删除一个本地标签</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#删除一个远程标签"><span class="toc-number">1.3.4.8.</span> <span class="toc-text">删除一个远程标签</span></a></li></ol></li></ol></li></ol></li></ol>
+        
+    </div>
+</aside>
+
+</header>
+
+        <div id="content" class="content"><article class="article" itemscope itemprop="blogPost">
+    
+    <section class="article-body markdown-body">
+        
+        <h1 id="git-基础命令使用笔记"><a href="#git-基础命令使用笔记" class="headerlink" title="git 基础命令使用笔记"></a>git 基础命令使用笔记</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>此处为对git使用的一个笔记记录，包括基本使用方法，命令，服务器组建。<br>当年林纳斯大神为了控制Linux的源代码信手撸来，诞生了这个出色的版本管理工具。</p>
+<blockquote>
+<p>注：git只能对普通文件进行管理，二进制文件无法做到修改的版本管理只能追踪更新。</p>
+</blockquote>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>windows版本的git安装非常简单下载安装包按照下一步一步步来即可。<br>安装完毕之后需要设置你的用户名和你使用的邮箱</p>
+<pre><code>git config --global user.name &quot;Your Name&quot;
+git config --global user.email &quot;email@example.com&quot;
+--global 参数代表全局使用变量
+</code></pre><h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><h4 id="初始化一个空的仓库（Git-repository）"><a href="#初始化一个空的仓库（Git-repository）" class="headerlink" title="初始化一个空的仓库（Git repository）"></a>初始化一个空的仓库（Git repository）</h4><blockquote>
+<p>git init </p>
+</blockquote>
+<h4 id="添加一次修改"><a href="#添加一次修改" class="headerlink" title="添加一次修改"></a>添加一次修改</h4><p>第一步 告诉git将一个文件添加进仓库</p>
+<blockquote>
+<p>1 git add . 或者git add <file>(即单个文件)<br>第二步 将文件提交到仓库<br>2 git commit -m “wrote a readme file”<br>-m是说明后面一定要写有意义的东西</file></p>
+</blockquote>
+<h4 id="掌握工作区的状态"><a href="#掌握工作区的状态" class="headerlink" title="掌握工作区的状态"></a>掌握工作区的状态</h4><blockquote>
+<p>git status</p>
+</blockquote>
+<h4 id="查看修改内容"><a href="#查看修改内容" class="headerlink" title="查看修改内容"></a>查看修改内容</h4><blockquote>
+<p>git diff readme.txt</p>
+</blockquote>
+<h3 id="回退"><a href="#回退" class="headerlink" title="回退"></a>回退</h3><h4 id="回退到上一个版本"><a href="#回退到上一个版本" class="headerlink" title="回退到上一个版本"></a>回退到上一个版本</h4><blockquote>
+<p>git reset –hard commit_id。<br>HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用命令</p>
+</blockquote>
+<h4 id="查看提交历史"><a href="#查看提交历史" class="headerlink" title="查看提交历史"></a>查看提交历史</h4><blockquote>
+<p>git log<br>以便确定要回退到哪个版本。</p>
+</blockquote>
+<h4 id="查看命令历史"><a href="#查看命令历史" class="headerlink" title="查看命令历史"></a>查看命令历史</h4><blockquote>
+<p>git reflog<br>以便确定要回到操作回退之后的哪个版本。</p>
+</blockquote>
+<p>###丢弃修改</p>
+<p>####丢弃工作区的修改</p>
+<blockquote>
+<p>git  checkout – file</p>
+</blockquote>
+<h4 id="撤销暂存区修改"><a href="#撤销暂存区修改" class="headerlink" title="撤销暂存区修改"></a>撤销暂存区修改</h4><blockquote>
+<p>git reset HEAD file</p>
+</blockquote>
+<h4 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h4><blockquote>
+<p>git rm<br>可以恢复到最新版本但是会丢失最近一次的修改内容。</p>
+</blockquote>
+<h3 id="远程仓库"><a href="#远程仓库" class="headerlink" title="远程仓库"></a>远程仓库</h3><h4 id="添加远程仓库"><a href="#添加远程仓库" class="headerlink" title="添加远程仓库"></a>添加远程仓库</h4><blockquote>
+<p>git remote add origin(这里是远程仓库名称) <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:miao/learngit.git</p>
+</blockquote>
+<h4 id="推送到远程分支"><a href="#推送到远程分支" class="headerlink" title="推送到远程分支"></a>推送到远程分支</h4><blockquote>
+<p>git push -u origin master<br>-u用于将本地master分支与远程分支关联起来,第一次之后就没有推送的必要了。</p>
+</blockquote>
+<h4 id="克隆远程仓库"><a href="#克隆远程仓库" class="headerlink" title="克隆远程仓库"></a>克隆远程仓库</h4><blockquote>
+<p>git clone url<br>将远程仓库克隆下来</p>
+</blockquote>
+<h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><h4 id="创建分支并切换到分支"><a href="#创建分支并切换到分支" class="headerlink" title="创建分支并切换到分支"></a>创建分支并切换到分支</h4><blockquote>
+<p>git checkout -b dev</p>
+</blockquote>
+<h4 id="查看当前分支"><a href="#查看当前分支" class="headerlink" title="查看当前分支"></a>查看当前分支</h4><blockquote>
+<p>git branch</p>
+</blockquote>
+<h4 id="切换分支"><a href="#切换分支" class="headerlink" title="切换分支"></a>切换分支</h4><blockquote>
+<p>git checkout master</p>
+</blockquote>
+<h4 id="合并分支"><a href="#合并分支" class="headerlink" title="合并分支"></a>合并分支</h4><blockquote>
+<p>git merge dev</p>
+</blockquote>
+<h4 id="删除分支"><a href="#删除分支" class="headerlink" title="删除分支"></a>删除分支</h4><blockquote>
+<p>git branch -d dev</p>
+</blockquote>
+<h4 id="查看分支合并图"><a href="#查看分支合并图" class="headerlink" title="查看分支合并图"></a>查看分支合并图</h4><blockquote>
+<p>git log –graph</p>
+</blockquote>
+<h4 id="禁用fast-forward模式合并分支"><a href="#禁用fast-forward模式合并分支" class="headerlink" title="禁用fast forward模式合并分支"></a>禁用fast forward模式合并分支</h4><blockquote>
+<p>git merge –no-ff -m “merge with no-ff” dev</p>
+</blockquote>
+<h4 id="存储工作现场"><a href="#存储工作现场" class="headerlink" title="存储工作现场"></a>存储工作现场</h4><blockquote>
+<p>git stash存储工作现场<br>git stash pop恢复并删除存储内容<br>git stash apply 恢复但是并不删除内容<br>git stash drop 删除存储的内容<br>git stash list 查看存储的内容</p>
+</blockquote>
+<h4 id="强行丢弃分支"><a href="#强行丢弃分支" class="headerlink" title="强行丢弃分支"></a>强行丢弃分支</h4><blockquote>
+<p>git branch -D <name></name></p>
+</blockquote>
+<h4 id="查看远程库信息"><a href="#查看远程库信息" class="headerlink" title="查看远程库信息"></a>查看远程库信息</h4><blockquote>
+<p>git remote -v</p>
+</blockquote>
+<h4 id="推送分支"><a href="#推送分支" class="headerlink" title="推送分支"></a>推送分支</h4><blockquote>
+<p>git push origin branch-name<br>如果推送失败则用git pull 抓取远程的新的提交</p>
+</blockquote>
+<h4 id="在本地创建与远程对应分支"><a href="#在本地创建与远程对应分支" class="headerlink" title="在本地创建与远程对应分支"></a>在本地创建与远程对应分支</h4><blockquote>
+<p>git checkout -b branch-name origin/branch-name<br>本地和远程分支的名称最好一致</p>
+</blockquote>
+<h4 id="建立本地分支和远程分支的关联"><a href="#建立本地分支和远程分支的关联" class="headerlink" title="建立本地分支和远程分支的关联"></a>建立本地分支和远程分支的关联</h4><blockquote>
+<p>git branch –set-upstream branch-name origin/branch-name</p>
+</blockquote>
+<h3 id="标签"><a href="#标签" class="headerlink" title="标签"></a>标签</h3><h4 id="创建新标签"><a href="#创建新标签" class="headerlink" title="创建新标签"></a>创建新标签</h4><blockquote>
+<p>git tag <name></name></p>
+</blockquote>
+<h4 id="指定标签信息"><a href="#指定标签信息" class="headerlink" title="指定标签信息"></a>指定标签信息</h4><blockquote>
+<p>git tag -a <tagname> -m “blablabla…”</tagname></p>
+</blockquote>
+<h4 id="可以用PGP签名标签"><a href="#可以用PGP签名标签" class="headerlink" title="可以用PGP签名标签"></a>可以用PGP签名标签</h4><blockquote>
+<p>git tag -s <tagname> -m “blablabla…”</tagname></p>
+</blockquote>
+<h4 id="查看所有标签"><a href="#查看所有标签" class="headerlink" title="查看所有标签"></a>查看所有标签</h4><blockquote>
+<p>git tag</p>
+</blockquote>
+<h4 id="推送一个本地标签"><a href="#推送一个本地标签" class="headerlink" title="推送一个本地标签"></a>推送一个本地标签</h4><blockquote>
+<p>git push origin <tagname></tagname></p>
+</blockquote>
+<h4 id="推送全部未推送过的本地标签"><a href="#推送全部未推送过的本地标签" class="headerlink" title="推送全部未推送过的本地标签"></a>推送全部未推送过的本地标签</h4><blockquote>
+<p>git push origin –tags</p>
+</blockquote>
+<h4 id="删除一个本地标签"><a href="#删除一个本地标签" class="headerlink" title="删除一个本地标签"></a>删除一个本地标签</h4><blockquote>
+<p>git tag -d <tagname></tagname></p>
+</blockquote>
+<h4 id="删除一个远程标签"><a href="#删除一个远程标签" class="headerlink" title="删除一个远程标签"></a>删除一个远程标签</h4><blockquote>
+<p>git push origin :refs/tags/<tagname></tagname></p>
+</blockquote>
+
+        
+    </section>
+</article>
+
+
+
+<div class="comments">
+    <div id="disqus_thread">
+        <p class="comment-tips">国内查看评论需要代理~</p>
+    </div>
+    <script>
+    window.disqus_config = function () {
+        this.language = 'zh';
+        this.page.url = 'http://yatsov.github.io/2018/04/21/front-end/git基础命令笔记/';
+        this.page.title = '';
+        this.page.identifier = '2018/04/21/front-end/git基础命令笔记/';
+    };
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document, s = d.createElement('script');
+        s.src = 'https://name.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</div>
+        <footer class="footer">
+    Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>, Theme by <a href="https://github.com/sanonz/hexo-theme-concise" target="_blank">Concise</a>
+</footer>
+
+<script type="text/javascript" src="//s13.cnzz.com/z_stat.php?id=1234567890&amp;web_id=1234567890"></script>
+
+
+    </div>
+
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.9.0/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="/js/scrollspy.min.js"></script>
+    
+    <script type="text/javascript">
+        $(function() {
+            var nodes = {
+                nav: $('#nav'),
+                aside: $('#aside'),
+                navTags: $('#nav-tags')
+            };
+
+            $('#open-panel, #aside-mask').on('click', function() {
+                nodes.aside.toggleClass('panel-show');
+            });
+            $('#nav-tag').on('click', function(event) {
+                event.preventDefault();console.log(nodes.navTags.attr('class'))
+                nodes.navTags.toggleClass('tag-show');console.log(nodes.navTags.attr('class'))
+            })/*.hover(function() {
+                nodes.navTags.addClass('tag-show');
+            }, function() {
+                nodes.navTags.removeClass('tag-show');
+            });*/
+
+            
+            $(document.body).scrollspy({target: '#aside-inner'});
+            
+        });
+    </script>
+
+</body>
+</html>

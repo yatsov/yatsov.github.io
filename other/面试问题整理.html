@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 面试问题整理 · yatsov的博客</title><meta name="description" content="面试问题整理 - yatsov"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yatsov.github.io/atom.xml" title="yatsov的博客"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">目录</a></li><li class="nav-list-item"><a href="/links/index.html" target="_self" class="nav-list-link">分类</a></li><li class="nav-list-item"><a href="https://github.com/yatsov/yatsov.github.io" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/about/index.html" target="_self" class="nav-list-link">关于</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">面试问题整理</h1><div class="post-info">2018年4月21日</div><div class="post-content"><p>面试问题整理<br><a id="more"></a></p>
+<h1 id="面试问题整理"><a href="#面试问题整理" class="headerlink" title="面试问题整理"></a>面试问题整理</h1><h3 id="1-overflow-实现省略号"><a href="#1-overflow-实现省略号" class="headerlink" title="1 overflow 实现省略号"></a>1 overflow 实现省略号</h3><p>首先overflow的常用属性：visible/hidden/scroll/auto/inherit<br>white-space:pre/pre-wrap/nowrap/pre-line/inherit；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> &lt;style type=&quot;text/css&quot;&gt;</span><br><span class="line">        .ellipsis&#123;</span><br><span class="line">            white-space: nowrap;</span><br><span class="line">            text-overflow: ellipsis;</span><br><span class="line">            overflow: hidden;</span><br><span class="line">        &#125;</span><br><span class="line">&lt;/style&gt;</span><br><span class="line">&lt;p class=&quot;ellipsis&quot; style=&quot;width: 100px;&quot;&gt;111111111111111111111111111111111111111&lt;/p&gt;</span><br></pre></td></tr></table></figure></p>
+<p>注意上面的代码最重要的是text-overflow:ellipsis;</p>
+<h3 id="2-如何水平垂直居中"><a href="#2-如何水平垂直居中" class="headerlink" title="2 如何水平垂直居中"></a>2 如何水平垂直居中</h3><p>1 flex<br>2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.parent &#123;</span><br><span class="line">  position: relative;</span><br><span class="line">&#125;</span><br><span class="line">.child &#123;</span><br><span class="line">  position: absolute;</span><br><span class="line">  top: 50%;</span><br><span class="line">  left: 50%;</span><br><span class="line">  transform: translate(-50%, -50%);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注意外部是relative<br>3 table布局<br>4 margin :0;注外部必须是块级元素</p>
+<h3 id="3-简述position每个项"><a href="#3-简述position每个项" class="headerlink" title="3 简述position每个项"></a>3 简述position每个项</h3><p>1、static（静态定位）：默认值。没有定位，元素出现在正常的流中（忽略 top, bottom, left, right 或者 z-index 声明）。</p>
+<p>2、relative（相对定位）：生成相对定位的元素，通过top,bottom,left,right的设置相对于其正常（原先本身）位置进行定位。可通过z-index进行层次分级。</p>
+<blockquote>
+<p>无论父级存在不存在，无论有没有TRBL，均是以父级的左上角进行定位，但是父级的Padding属性会对其影响。　　</p>
+</blockquote>
+<p>3、absolute（绝对定位）：生成绝对定位的元素，相对于 static 定位以外的第一个父元素进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。可通过z-index进行层次分级。</p>
+<p>4、fixed（固定定位）：生成绝对定位的元素，相对于浏览器窗口进行定位。元素的位置通过 “left”, “top”, “right” 以及 “bottom” 属性进行规定。可通过z-index进行层次分级。</p>
+<p>static与fixed的定位方式较好理解，在此不做分析。下面对应用的较多的relative和absolute进行分析：</p>
+<h3 id="4-事件执行模型"><a href="#4-事件执行模型" class="headerlink" title="4 事件执行模型"></a>4 事件执行模型</h3><p>程序里面所有的任务，可以分成两类：同步任务（synchronous）和异步任务（asynchronous）。</p>
+<p>同步任务是那些没有被引擎挂起、在主线程上排队执行的任务。只有前一个任务执行完毕，才能执行后一个任务。</p>
+<p>异步任务是那些被引擎放在一边，不进入主线程、而进入任务队列的任务。只有引擎认为某个异步任务可以执行了（比如 Ajax 操作从服务器得到了结果），该任务（采用回调函数的形式）才会进入主线程执行。排在异步任务后面的代码，不用等待异步任务结束会马上运行，也就是说，异步任务不具有”堵塞“效应。</p>
+<p>举例来说，Ajax 操作可以当作同步任务处理，也可以当作异步任务处理，由开发者决定。如果是同步任务，主线程就等着 Ajax 操作返回结果，再往下执行；如果是异步任务，主线程在发出 Ajax 请求以后，就直接往下执行，等到 Ajax 操作有了结果，主线程再执行对应的回调函数。</p>
+<blockquote>
+<p>注意主线程和任务队列，</p>
+</blockquote>
+<h3 id="5-settimeout-setinterval"><a href="#5-settimeout-setinterval" class="headerlink" title="5 settimeout setinterval"></a>5 settimeout setinterval</h3><blockquote>
+<p><a href="https://m.jb51.net/article/99174.htm" target="_blank" rel="noopener">https://m.jb51.net/article/99174.htm</a></p>
+</blockquote>
+<h3 id="5-a-bind-b-bind-c-为什么后面绑定的是c-还没完全解决"><a href="#5-a-bind-b-bind-c-为什么后面绑定的是c-还没完全解决" class="headerlink" title="5 a.bind(b).bind(c)为什么后面绑定的是c 还没完全解决"></a>5 a.bind(b).bind(c)为什么后面绑定的是c 还没完全解决</h3><h3 id="6-promise的实现理解-这个要搞"><a href="#6-promise的实现理解-这个要搞" class="headerlink" title="6 promise的实现理解 这个要搞"></a>6 promise的实现理解 这个要搞</h3><h3 id="7-函数会返回一个默认的promise"><a href="#7-函数会返回一个默认的promise" class="headerlink" title="7 函数会返回一个默认的promise"></a>7 函数会返回一个默认的promise</h3><h3 id="8-位运算"><a href="#8-位运算" class="headerlink" title="8 位运算"></a>8 位运算</h3><p><a href="http://cn.mikecrm.com/httqqWJ" target="_blank" rel="noopener">http://cn.mikecrm.com/httqqWJ</a></p>
+<pre><code>位运算即在比特级别进行操作的技术。使用位运算技术可以带来更快的运行速度与更小的内存使用。
+测试第 k 位：s &amp; (1 &lt;&lt; k);
+设置第k位：s |= (1 &lt;&lt; k);
+关闭第k位：s &amp;= ~(1 &lt;&lt; k);
+切换第k位：s ^= (1 &lt;&lt; k);
+乘以2的n方：s &lt;&lt; n;
+除以2的n方：s &gt;&gt; n;
+交集：s &amp; t;
+并集：s | t;
+减法：s &amp; ~t;
+提取最小非0位：s &amp; (-s);
+提取最小0位：~s &amp; (s + 1);
+交换值：x ^= y; y ^= x; x ^= y;
+</code></pre><h3 id="9-HTTP协议详解"><a href="#9-HTTP协议详解" class="headerlink" title="9 HTTP协议详解"></a>9 HTTP协议详解</h3><p><a href="http://blog.jobbole.com/108188/" target="_blank" rel="noopener">http://blog.jobbole.com/108188/</a></p>
+<h3 id="10-基本类型和引用类型的区别"><a href="#10-基本类型和引用类型的区别" class="headerlink" title="10 基本类型和引用类型的区别"></a>10 基本类型和引用类型的区别</h3><h2 id="编程"><a href="#编程" class="headerlink" title="编程"></a>编程</h2><h3 id="二叉树序列化"><a href="#二叉树序列化" class="headerlink" title="二叉树序列化"></a>二叉树序列化</h3><p><a href="http://web.jobbole.com/94195/" target="_blank" rel="noopener">http://web.jobbole.com/94195/</a></p>
+<h3 id="11-高并发处理"><a href="#11-高并发处理" class="headerlink" title="11 高并发处理"></a>11 高并发处理</h3><p>1、避免静态页面，与服务器交互，缓存<br>2、增加服务器资源</p>
+<h3 id="12-权限设计"><a href="#12-权限设计" class="headerlink" title="12 权限设计"></a>12 权限设计</h3><h3 id="13-跨域"><a href="#13-跨域" class="headerlink" title="13 跨域"></a>13 跨域</h3><p>1 CORS</p>
+</div></article></div></main><footer><div class="paginator"><a href="/mysql/MySQL主从复制.html" class="prev">PREV</a><a href="/algorithm/JS前端绘制地图思路实现.html" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="http://yatsov.github.io">yatsov</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

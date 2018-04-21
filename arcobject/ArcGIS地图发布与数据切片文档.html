@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> ArcGIS地图发布与数据切片 · yatsov的博客</title><meta name="description" content="ArcGIS地图发布与数据切片 - yatsov"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yatsov.github.io/atom.xml" title="yatsov的博客"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">目录</a></li><li class="nav-list-item"><a href="/links/index.html" target="_self" class="nav-list-link">分类</a></li><li class="nav-list-item"><a href="https://github.com/yatsov/yatsov.github.io" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/about/index.html" target="_self" class="nav-list-link">关于</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">ArcGIS地图发布与数据切片</h1><div class="post-info">2018年4月21日</div><div class="post-content"><p>ArcGIS地图发布与数据切片<br><a id="more"></a></p>
+<blockquote>
+<p>下面介绍如何发布ArcGIS Server服务并对其进行切片</p>
+</blockquote>
+<h2 id="地图发布"><a href="#地图发布" class="headerlink" title="地图发布"></a>地图发布</h2><p>在发布服务之前首先要对地图服务按照标准进行数据整备，当一个MXD文档中的地图数据整备完毕之后就可以将，MXD文档发布为ArcGIS地图服务了。步骤如下：</p>
+<p>1、首先点击 文件（File） (Share As) 服务Service 进入发布对话框</p>
+<p><img src="media/3d75313d5a20cd8bd8becc0310517892.png" alt=""></p>
+<p>图6.1</p>
+<p>2、这里有三个选项<br>1）发布服务，如果是第一次发布就选择这个。2）发布为服务定义文件。3）覆盖一个已经存在的服务，如果是要覆盖原来的服务重新发布则选择这个。根据您的需要进行选择。</p>
+<p><img src="media/09674bdf54cabc177dd52ae7e6510db6.png" alt=""></p>
+<p>图6.2</p>
+<p>3、这个面板上面的参数是选择服务器连接，这里就是要准备连接要发布的服务器。如果下拉菜单里没有选项，<br>那么点击右边的加号按钮。进行添加如图。之后选择连接以及服务名称进行下一步。</p>
+<p><img src="media/de2f2314e6e2581aa71d574f96b02174.png" alt=""></p>
+<p>图6.3</p>
+<p><img src="media/f444a20127c20ccd35ff56904a3d0ed5.png" alt=""></p>
+<p>图6.4</p>
+<p><img src="media/6c1bd0111274f030e75b110cd2b0caa2.png" alt=""></p>
+<p>图6.5</p>
+<p>4、选择文件存放位置，如图所示。每个服务都可以放到一个文件夹下分类，如果没有文件夹可以重新创建一个。</p>
+<p><img src="media/ef353da006c4c006711279cedc7c8dab.png" alt=""></p>
+<p>图6.6</p>
+<p>5、进入服务编辑面板，首先点击上面的</p>
+<p><img src="media/e49c5f52d3789bae66da4f939534ad78.png" alt=""></p>
+<p>工具进行检查。</p>
+<p><img src="media/640381f990a0cde4f10fdd4512ab7b2d.png" alt=""></p>
+<p>图6.7</p>
+<p>这个面板负责勾选服务具有的属性，例如地图属性(Mapping)、WCS服务、WMS服务、Feature<br>Access服务（需要与数据库连接）等。根据需要进行选择。</p>
+<p><img src="media/41bd3e63145cb6c4755918df13a4d018.png" alt=""></p>
+<p>图6.8</p>
+<p>6、进行瓦片规格设置，如图所示为缓存设置面板，用于切片服务的设置。根据图片上的提升，首先选择使用瓦片。之后在切片方案里面</p>
+<p><img src="media/2c7db2c8b32db67ef7a2c94c098b9ed3.png" alt=""></p>
+<p>选择我们已经准备好的切片方案加载</p>
+<p><img src="media/0c2122dd4beb9346f8a3f110813d2c2f.png" alt=""></p>
+<p>。之后根据数据需要在进行级别的选择。</p>
+<p><img src="media/121e27d0f62b6cd6bbcc9a7245365e9d.png" alt=""></p>
+<p>图6.9</p>
+<p>7、在信息描述面板里面添加描述</p>
+<p><img src="media/662ba81ed92627fb4b43173d4b61b933.png" alt=""></p>
+<p>8、点击</p>
+<p><img src="media/b9251a89dfe111a3db8a49fd5e2f33c2.png" alt=""></p>
+<p>发布</p>
+<h2 id="服务切片"><a href="#服务切片" class="headerlink" title="服务切片"></a>服务切片</h2><p>以上的步骤已经将一个服务发布到了ArcGIS<br>Server中，之后如果您刚才设置了瓦片切片，现在就需要切片。步骤如下：</p>
+<p>1、打开ArcCatelog，寻找自己的刚才发布的服务。右键—>管理缓存进入管理切片对话框。</p>
+<p><img src="media/5c29bf2fea524db1fcf8a06c7cc58503.png" alt=""></p>
+<p>图7.1</p>
+<p>2、如图所示为开始进行缓存的对话框。首先选择</p>
+<p><img src="media/a5ee0008a069fe29b3eef177085f2a1e.png" alt=""></p>
+<p>切片方式包括RECREATE_ALL_TILES（重新切片）、RECREATE_EMPTY_TILES（将空瓦片切片）、DELETE_TILES(删除瓦片)。三种根据需要进行选择。</p>
+<p>3、之后确认其他参数无误，点击OK开始切片。右键点击</p>
+<p><img src="media/ffe0a161e48f75534f622cdac17af49d.png" alt=""></p>
+<p>可以查看缓存情况</p>
+<p>。</p>
+<p><img src="media/b7a0751d2a2f61d6f917943f4e97f11f.png" alt=""></p>
+<p><img src="media/ab4ebfc0499de197522a3d50149bb5c8.png" alt=""></p>
+<p>图7.2</p>
+</div></article></div></main><footer><div class="paginator"><a href="/Tomcat/Tomcat的安装以及简要调优.html" class="prev">PREV</a><a href="/arcobject/ArcGIS点专线.html" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="http://yatsov.github.io">yatsov</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> MySQL复制即相关维护 · yatsov的博客</title><meta name="description" content="MySQL复制即相关维护 - yatsov"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yatsov.github.io/atom.xml" title="yatsov的博客"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">目录</a></li><li class="nav-list-item"><a href="/links/index.html" target="_self" class="nav-list-link">分类</a></li><li class="nav-list-item"><a href="https://github.com/yatsov/yatsov.github.io" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/about/index.html" target="_self" class="nav-list-link">关于</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">MySQL复制即相关维护</h1><div class="post-info">2018年4月21日</div><div class="post-content"><p>MySQL复制即相关维护<br><a id="more"></a></p>
+<p>##　MySQL复制原理及简介</p>
+<h3 id="1-复制的优点"><a href="#1-复制的优点" class="headerlink" title="1 复制的优点"></a>1 复制的优点</h3><blockquote>
+<p>如果主库出现问题，可以快速切换到从库。<br>可以再从从库上执行查询操作，降低主库的访问压力。<br>可以在从库上实现备份，避免备份期间影响主库服务。</p>
+</blockquote>
+<h3 id="2-复制流程概述"><a href="#2-复制流程概述" class="headerlink" title="2 复制流程概述"></a>2 复制流程概述</h3><p>1 首先，MySQL主库在事务提交时会把数据变更作为时间Events记录在二进制日志文件Binlog中；MySQL主库上的sync_binlog控制binlog日志刷新到磁盘。  </p>
+<blockquote>
+<p>当这个值是0或者1 的时候这个延时是由binlog_group_commit_sync_delay（即磁盘上等待多长时间统一提交）指定的。而次数大于n的时候意思是每n此提交。源自MySQL5.7文档</p>
+</blockquote>
+<p>2 主库推送二进制日志文件Binlog中的事件到从库的中继日志Relay Log，之后从库根据中级日志重做数据变更操作，最终达到主从一直的目的。</p>
+<p>3 MySQL通过三个线程来完成主从库之间的数据复制：Binlog Dump线程跑在主库上，I/O线程和SQL线程跑在从库上。当从库启动复制的时候，首先创建i/O线程连接主库，主库随后创建Binlog Dump线程读取数据库时间发送给I/O线程，I/O线程获取到事件数据后更新到中继日志中去，之后从库的SQL线程读取中继日志中的更新并运用。</p>
+<blockquote>
+<p>show processlist可以查看主库上的Binlog Dump线程<br>show slave status 可以查看从库复制状态</p>
+</blockquote>
+<h3 id="3-Binlog-三种复制方式"><a href="#3-Binlog-三种复制方式" class="headerlink" title="3 Binlog 三种复制方式"></a>3 Binlog 三种复制方式</h3><p>1、Statement基于SQL语句级别的Binlog，每条修改数据的SQL都会保存。<br>2、Row基于行级别，记录每一行数据的变化。不会因为存储过程或者触发器造成主从库不一致，但是记录日志量会比上一个大很多。<br>3、Mixed,混合Statement和Row模式默认情况下采用Statement模式某些情况下采用Row。</p>
+<blockquote>
+<p>使用binlog-format 变量记录,更改设置方法<br>set global binlog_format = ‘Row’如果没有global则是当前session。<br>show binlog events 可以查看Update操作在Binlog日志文件中对应的位置。</p>
+</blockquote>
+<h3 id="4-常见架构"><a href="#4-常见架构" class="headerlink" title="4 常见架构"></a>4 常见架构</h3><p>1 一主多从<br>2 多级复制 减小主机压力</p>
+<blockquote>
+<p>可以使用BLACKHOLE引擎来降低多级复制的延时，他的操作仅在Binlog里面记录。<br>3 双主架构，避免了从库的额外工作。</p>
+</blockquote>
+<h2 id="搭建过程"><a href="#搭建过程" class="headerlink" title="搭建过程"></a>搭建过程</h2><p>1 首先尽量保证版本一致且版本最新。（我是5.6 5.7 成功但是还是建议版本号越近越新越好。)</p>
+<p>2 在主库上设置使用账户给予REPLICATION SLAVE权限</p>
+<blockquote>
+<p>GRANT REPLICATION SLAVE ON <em>.</em> to ‘repl‘@’ip地址’ identified by ‘password’;</p>
+</blockquote>
+<p>3 修改主库上的my.cnf配置文件开启binlog设置server-id<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">server-id=1   //给数据库服务的唯一标识，一般为大家设置服务器Ip的末尾号</span><br><span class="line">log-bin=master-bin</span><br><span class="line">log-bin-index=master-bin.index</span><br><span class="line">``` </span><br><span class="line">4 封住主库避免修改影响主从同步。</span><br><span class="line">&gt;flush tables with read lock;</span><br><span class="line"></span><br><span class="line">5 得到主库当前的二进制日志名和偏移量值。**并记录下来**</span><br><span class="line">&gt;show master status;</span><br><span class="line"></span><br><span class="line">6 主从复制保持同步。并解锁。</span><br><span class="line"></span><br><span class="line">7 配置从库</span><br></pre></td></tr></table></figure></p>
+<p>server-id=2<br>relay-log-index=slave-relay-bin.index<br>relay-log=slave-relay-bin<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">8 创建到主库的连接</span><br></pre></td></tr></table></figure></p>
+<p>change master to master_host=’192.168.0.104’, //Master 服务器Ip<br>master_port=3306,<br>master_user=’repl’,<br>master_password=’mysql’,<br>master_log_file=’master-bin.000001’,//Master服务器产生的日志<br>master_log_pos=0;<br><code>`</code><br>9 在从库上启动slave线程</p>
+<blockquote>
+<p>start slave;</p>
+</blockquote>
+<p>10 之后就可以在主库上插入点数据看看啦~~~测试是否成功</p>
+<h2 id="其它配置"><a href="#其它配置" class="headerlink" title="其它配置"></a>其它配置</h2><p>log-slave-updates<br>用来配置从库的更新是否写入二进制文件，以便将其作为其他的主库。<br>master-connect-retry<br>用来设置和主库的连接丢失重试的时间间隔，默认是60s<br>read-only<br>只允许超级用户更新操作。<br>replicate0do-db、replicate-do-table、replicate-ignore-db、replicate-ignore-table<br>表示记录的表以及忽略的表在binlog中</p>
+<h2 id="日常维护"><a href="#日常维护" class="headerlink" title="日常维护"></a>日常维护</h2><p>1、 查看从库状态</p>
+<blockquote>
+<p>show slave status<br>进程 Slave_IO_Running :从此进程负责的从库和主库上读取BINLOG日志，并写入从库上的中继日志。<br>进程 Slave_SQL_Running 此进程负责读取并执行中继日志中的binlog日志。</p>
+</blockquote>
+<p>2、主从同步维护<br>由于双机性能不同可能导致主从性能不同，同步不同。<br>1、主库上首先阻止读入。</p>
+<blockquote>
+<p>FLUSH TABLESWITH READ LOCK<br>2、在从库上使用MASTER_POS_WAIT()函数的参数是钱买步骤中得到的日志位置值。<br>select MASTER_POS_WAIT(‘日志名’,’位置值’)<br>这个日志会阻塞知道从库抵达该位置，返回0.如果返回-1则代表超时。<br>3、UNLOCK解锁。<br>UNLOCK TABLES</p>
+</blockquote>
+<p>3、复制出错<br>如果复制出现问题首先确认是不素食表结构不一致导致的，如果是则修改表结构到一致 。<br>如果不是那么是某一句话出现的问题可以采用忽略这句话，或者是不将其记录到log中在在从库中进行操作保证服主从同步。</p>
+<p>4、查看从库复制进度<br>使用show processlist 列表中的Slave_SQL_Running 线程的time进行比较。<br>也可以用show slave status查看从库落后主库的事件。（Seconds_Behind_Master）<br>另外为了提高从库复制效率还可以将主库的数据库分别复制到不同的从库上分担性能。也就是一个数据库中只负责主库的几个数据库。</p>
+<p>5、主从切换<br>1、首先确保所有的从库都已经执行了relay log中的全部更新，在每个从苦涩，执行STOP SLAVE IO_THREAD然后检查SHOW PROCESSLIST的输出知道状态都是 Has read all relay log。<br>2、在从库A1上，执行STOP SLAVE以停止服务，然后执行RESET MASTER以重置成主数据库；<br>3、在其余数据库上执行STOP SLAVE以停止服务，然后执行CHANGE MASTER TO MASTER_HOST =’S1’重新设置主库，在执行START SLAVE以启动复制。<br>4、通知所有的客户端将主库指向S1。</p>
+</div></article></div></main><footer><div class="paginator"><a href="/CSS/翻译-如何居中.html" class="prev">PREV</a><a href="/other/面试问题整理.html" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="http://yatsov.github.io">yatsov</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

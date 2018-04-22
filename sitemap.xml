@@ -2,16 +2,30 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://yatsov.github.io/about/index.html</loc>
+    <loc>http://yatsov.github.io/categories/index.html</loc>
     
-    <lastmod>2018-04-21T12:18:40.811Z</lastmod>
+    <lastmod>2018-04-22T11:49:17.602Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yatsov.github.io/work/index.html</loc>
+    
+    <lastmod>2018-04-22T11:46:09.328Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://yatsov.github.io/links/index.html</loc>
     
-    <lastmod>2018-04-21T11:45:24.719Z</lastmod>
+    <lastmod>2018-04-22T11:46:05.512Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>http://yatsov.github.io/about/index.html</loc>
+    
+    <lastmod>2018-04-21T12:18:40.811Z</lastmod>
     
   </url>
   

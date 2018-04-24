@@ -9,7 +9,7 @@
 		padding: 0;
 	}
 		#bg{
-			background-image: linear-gradient( 135deg, #81FBB8 10%, #28C76F 100%);
+			background-image: linear-gradient( 135deg, #ABDCFF 10%, #0396FF 100%);
 			width: calc(100%);
 			height: calc(100%);
 			position: absolute;
@@ -31,10 +31,53 @@
 			position: absolute;
 			left: 50%;top: 50%;
 			transform: translate(-50%,-50%);
+			border-radius: 10px;
 		}
-		#text p{
-			font-size: 
+		#text p:nth-child(1){
+			font-size: 10rem;
+			color: #f3f9f1;
+			text-align: center;
 		}
+		#text p:nth-child(2){
+			font-size: 1rem;
+			color: #f3f9f1;
+			text-align: center;
+		}
+		.btn {
+	display: inline-block;
+	padding: 6px 12px;
+	margin-bottom: 0;
+	font-size: 14px;
+	font-weight: 400;
+	line-height: 1.42857143;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-ms-touch-action: manipulation;
+	touch-action: manipulation;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	background-image: none;
+	border: 1px solid transparent;
+	border-radius: 4px;
+}
+.btn-primary {
+	color: #fff;
+	background-color: #337ab7;
+	border-color: #2e6da4;
+}
+.btn.focus, .btn:focus, .btn:hover {
+	color: #333;
+	text-decoration: none;
+}
+.btn-primary:hover {
+	color: #fff;
+	background-color: #286090;
+	border-color: #204d74;
+}
 	</style>
 </head>
 <body>
@@ -43,8 +86,15 @@
 		
 		</div>
 		<div id="text">
-			<p>404</p>
+			<div  style="width: calc(60%);float: left;height: calc(100%);">
+				<p  style="">404</p>
+				<p>您所需要的页面暂未找到~~</p>
+			</div>
+			<div style="width: calc(40%);float: left;height: calc(100%);text-align: center;">
+				<a href="http://112.74.52.111:8080/MapAllInOne/index.html" class="btn btn-primary btn-lg active" role="button" style="margin-top: 120px;">返回首页</a>
+			</div>
 		</div>
+
 	</div>
 </body>
 </html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> GeTools中的JTS基础(2) · yatsov的博客</title><meta name="description" content="GeTools中的JTS基础(2) - yatsov"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yatsov.github.io/atom.xml" title="yatsov的博客"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">目录</a></li><li class="nav-list-item"><a href="/categories/index.html" target="_self" class="nav-list-link">分类</a></li><li class="nav-list-item"><a href="https://github.com/yatsov/yatsov.github.io" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/about/index.html" target="_self" class="nav-list-link">关于</a></li><li class="nav-list-item"><a href="/work/index.html" target="_self" class="nav-list-link">作品</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">GeTools中的JTS基础(2)</h1><div class="post-info">2018年5月6日</div><div class="post-content"><p>介绍JTS的使用,是对GeoTools的一个翻译。针对Testing equality of Geometry objects页<br><a id="more"></a></p>
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>JTS包含着不同的判断Geometry对象是否相同的方法。如果你正在做大量的复杂的Geometry对象比较，那么了解不同的方法直接的区别会在你的应用运行时起到很大的帮助。</p>
+<blockquote>
+<p><strong>提示:如果这一页你觉得又臭又长,那么最终要的一点是永远避免使用Geometry.equals( Geometry g )。使用equalsExact 或 equalsTopo代替。</strong></p>
+</blockquote>
+<h2 id="方法介绍"><a href="#方法介绍" class="headerlink" title="方法介绍"></a>方法介绍</h2><h3 id="Geometry-equalsExact-Geometry-g"><a href="#Geometry-equalsExact-Geometry-g" class="headerlink" title="Geometry.equalsExact( Geometry g ):"></a>Geometry.equalsExact( Geometry g ):</h3><p>这个方法测试Geometry对象结构的相等。简单来说，这意味着它们必须有相同数量的顶点，在相同的位置和相同的顺序中。后一种情况是棘手的。如果两个多边形，相互比较，他们的定点相同但是两个顺序正好相反那么就会输出错误。了解这一点很重要，因为当对象存储在数据存储中并随后从数据存储中检索时，顶点顺序可能发生变化。</p>
+<h3 id="Geometry-equalsExact-Geometry-g-double-tolerance"><a href="#Geometry-equalsExact-Geometry-g-double-tolerance" class="headerlink" title="Geometry.equalsExact( Geometry g, double tolerance )"></a>Geometry.equalsExact( Geometry g, double tolerance )</h3><p>这与前面的方法一样，但允许您为比较顶点坐标指定一个容差。</p>
+<h3 id="Geometry-equalsNorm-Geometry-g"><a href="#Geometry-equalsNorm-Geometry-g" class="headerlink" title="Geometry.equalsNorm( Geometry g )"></a>Geometry.equalsNorm( Geometry g )</h3><p>这个方法让你从节点的顺序问题中解放了出来，通过几何对象的规范化(即，将每一种形式变成标准或规范形式在比较之前)。它与下面是相等的：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">geomA.normalize();</span><br><span class="line">geomB.normalize();</span><br><span class="line">boolean result = geomA.equalsExact( geomB );</span><br></pre></td></tr></table></figure>
+<p>它能够保证顺序一致，但是代价是昂贵的需要额外计算。</p>
+<h3 id="Geometry-equalsTopo-Geometry-g"><a href="#Geometry-equalsTopo-Geometry-g" class="headerlink" title="Geometry.equalsTopo( Geometry g )"></a>Geometry.equalsTopo( Geometry g )</h3><pre><code>This method tests for topological equality which is equivalent to drawing the two Geometry objects and seeing if all of their component edges overlap. It is the most robust kind of comparison but also the most computationally expensive.
+</code></pre><p>Geometry.equals( Object o )<br>    This method is a synonym for Geometry.equalsExact and lets you use Geometry objects in Java Collections.<br>Geometry.equals( Geometry g )</p>
+<pre><code>This method is a synonym for Geometry.equalsTopo. It should really come with a health warning because its presence means that you can unknowingly be doing computationally expensive comparisons when quick cheap ones are all you need. For example:
+
+Geometry geomA = ...
+Geometry geomB = ...
+
+// If geomA and geomB are complex, this will be slow:
+boolean result = geomA.equals( geomB );
+
+// If you know that a structural comparison is all you need, do
+// this instead:
+result = geomA.equalsExact( geomB );
+
+The best thing approach you can take with this method is vow never to use it.
+</code></pre><h3 id="待完成………"><a href="#待完成………" class="headerlink" title="待完成……….."></a>待完成………..</h3></div></article></div></main><footer><div class="paginator"><a href="/gis/GeoServer如何发布一个WPS服务.html" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="http://yatsov.github.io">yatsov</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

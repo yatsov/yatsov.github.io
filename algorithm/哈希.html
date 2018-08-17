@@ -1,0 +1,46 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 哈希 · yatsov的博客</title><meta name="description" content="哈希 - yatsov"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://yatsov.github.io/atom.xml" title="yatsov的博客"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">目录</a></li><li class="nav-list-item"><a href="/categories/index.html" target="_self" class="nav-list-link">分类</a></li><li class="nav-list-item"><a href="https://github.com/yatsov/yatsov.github.io" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/about/index.html" target="_self" class="nav-list-link">关于</a></li><li class="nav-list-item"><a href="/work/index.html" target="_self" class="nav-list-link">作品</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">哈希</h1><div class="post-info">2018年8月17日</div><div class="post-content"><p>JS 实现堆排序<br><a id="more"></a></p>
+<h2 id="关于散列表的笔记"><a href="#关于散列表的笔记" class="headerlink" title="关于散列表的笔记"></a>关于散列表的笔记</h2><h3 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h3><p>散列技术实在记录的存储位置和它的关键字之间建立一个确定的对应关系f使得每个关键字key对应一个存储位置f(key)。</p>
+<h3 id="散列原则"><a href="#散列原则" class="headerlink" title="散列原则"></a>散列原则</h3><p>1、计算简单</p>
+<p>计算如果过于复杂，那么也会产生性能问题。</p>
+<p>2、散列分布均匀</p>
+<p>分布均匀的散列查询也会有益于查询减小查询长度。</p>
+<h3 id="散列的构造方法"><a href="#散列的构造方法" class="headerlink" title="散列的构造方法"></a>散列的构造方法</h3><p>1、直接定址法</p>
+<p>取某个关键的线性函数的值为散列值。适用于量比较少的情况。</p>
+<p>2、数字分析法</p>
+<p>主要是分析数字然后抽取。</p>
+<p>3、平方取中法</p>
+<p>4、折叠法</p>
+<p>距离将一个关键字987654321分为四组之后再叠加求和</p>
+<p>5、除留余数法</p>
+<p>6、随机数法</p>
+<h3 id="处理散列冲突的方法"><a href="#处理散列冲突的方法" class="headerlink" title="处理散列冲突的方法"></a>处理散列冲突的方法</h3><p>1、开放定址法</p>
+<p>开放定址法 就是一旦发生了冲突，就回去寻找下一个空的散列地址。</p>
+<blockquote>
+<p>f(key) = (f(key)+di)MOD m;</p>
+</blockquote>
+<p>以上解决冲突的开放定址法称为线性探测法。</p>
+<p>di的函数如果是平方的话，那么叫做二次探测法</p>
+<p>2、在散列函数法</p>
+<p>就是当一个散列函数失败之后更换另一个散列函数.</p>
+<p>3、链地址法</p>
+<p>就是冲突之后直接在冲突后面，用链表连接好。</p>
+<p>4、公共区溢出法</p>
+<p>就是如果冲突就去溢出表内进行查找。</p>
+<h3 id="散列的性能分析"><a href="#散列的性能分析" class="headerlink" title="散列的性能分析"></a>散列的性能分析</h3><p>1、散列函数是否均匀。</p>
+<p>2、如何处理冲突。</p>
+<p>3、散列的装填因子</p>
+<p>散列的装填因子=填入表中的记录个数/散列表长度</p>
+<h2 id="如何计算平均查找长度"><a href="#如何计算平均查找长度" class="headerlink" title="如何计算平均查找长度"></a>如何计算平均查找长度</h2><p>平均查找长度=走过的节点路径综合/总结点数</p>
+<p>1.顺序查找：</p>
+<p>等概率条件下</p>
+<p>平均查找长度：ASL = (n+….+2+1)/n= (n+1)/2。</p>
+<p>2.二分法查找：</p>
+<p>平均查找长度：ASL = log2(n+1)-1。</p>
+<p>原因：用二叉树来描述，树的高度d与节点树的关系为：n=(1+2+4+…… 2^(d-1))=2^d - 1；所以d = log2(n+1)，每一层只需要比较一次，所以最多需要比较log2(n+1)次。</p>
+<p>3.分块查找：</p>
+<p>又称索引顺序查找，由分块有序（每一块中的关键字不一定有序，但是前一块中的最大关键字必须小于后一块中的最小关键字，即分块有序。）的索引表和线性表组成。例如把r【1….n】分为 b 块，则前 b-1 块节点数为 s = 【n/b】，最后一块允许小于或等于s。索引表是一个递增有序表。</p>
+<p>平均查找长度分为两部分，索引表的查找+块内的查找。（索引表能够用二分法和顺序查找，块内无序，所以只能用顺序查找）</p>
+<p>如果以二分查找来确定块，则 ASL = log2(b+1)-1 + (s+1)/2。</p>
+<p>如果以顺序查找来确定块，则 ASL = (b+1)/2 + (s+1)/2。</p>
+<p>如果以哈希查找来确定块，则ASL=1 + (s+1)/2。</p>
+</div></article></div></main><footer><div class="paginator"><a href="/geoserver/样式.html" class="next">NEXT</a></div><div class="copyright"><p>© 2016 - 2018 <a href="http://yatsov.github.io">yatsov</a>, powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
